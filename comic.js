@@ -53,6 +53,11 @@ function addQueen() {
 var queenBtn = document.querySelector('#addQueen');
 queenBtn.addEventListener('click', addQueen, false);
 
+var speechBtn = document.querySelector('#addSpeech');
+speechBtn.addEventListener('click', function() { addBubble(); }, false);
+
+
+
 
 var bgClouds = new Image();
 bgClouds.onload = render;
@@ -86,13 +91,25 @@ col2.name = "col1";
 frame.addChild(border, col1, col2);
 
 
-function render() {
 
-    var bubbleText = new createjs.Text("This is some sample test that should spill over onto some new lines.", "normal 16px 'Gloria Hallelujah', cursive", "#000");
+function addBubble(_text, _x, _y) {
+
+    var sampleText = [
+        'Oh herro. Did you know I\'ve got over eleven goldfish in my bathtub?',
+        'OH NOES!!!',
+        '...I opened the door and there was blood everywhere',
+        'GET OUT OF MY HEAD!',
+        'Do you smell poo?',
+        'I\'ve tasted human flesh.'
+    ];
+
+
+    var text = (_text === undefined) ? sampleText[Math.floor(sampleText.length * Math.random())] : _text;
+    var bubbleText = new createjs.Text(text, "normal 16px 'Gloria Hallelujah', cursive", "#000");
     bubbleText.textAlign = "left";
     bubbleText.lineWidth = 180;
     bubbleText.name = 'text';
-    bubbleText.x = -75;
+    bubbleText.x =  -75;
     bubbleText.y = -55;
 
     var hitArea = new createjs.Shape(new createjs.Graphics().beginFill("#fff").drawRect(-80 , -50, 150,60));
@@ -104,12 +121,9 @@ function render() {
     bubbleImg.y = -70;
 
     var bubbleDrag = new createjs.Container();
-    bubbleDrag.x  = 150;
-    bubbleDrag.y = 70;
+    bubbleDrag.x  = (_x === undefined) ? 100 : _x;
+    bubbleDrag.y = (_y === undefined) ? 100 : _y;
     bubbleDrag.addChild(bubbleImg, hitArea, bubbleText);
-
-    stage.addChild(background, bubbleDrag, frame);
-
 
     hitArea.on('dblclick', function(event) {
         var userText = prompt('Enter text');
@@ -132,7 +146,15 @@ function render() {
         stage.update();   
     });
 
+    stage.addChild(bubbleDrag);
+}
 
+
+function render() {
+    
+
+    stage.addChild(background, frame);
+    addBubble('WHY ARE YOU STILL HERE DAVID? \n\nHAVEN\'T YOU GOT HOME TO GO TO?', 150, 70);
     addDragImg(cameronImg, 10, 200);
     addDragImg(queenImg, 360, 220, true);
 
