@@ -1,4 +1,9 @@
 var stage = new createjs.Stage("strip");
+
+stage.canvas.onmousedown = function(event) {
+    event.preventDefault();
+}
+
 // this lets our drag continue to track the mouse even when it leaves the canvas:
 // play with commenting this out to see the difference.
 stage.mouseMoveOutside = true;
@@ -10,23 +15,39 @@ bgRedClouds.src = 'images/bg_red_clouds.jpg';
 var queenImg = new Image();
 queenImg.src = 'images/queen.png';
 
-function addQueen() {
-    var queenContainer = new createjs.Container();
-    queenContainer.x = 100;
-    queenContainer.y = 100;
-    var queenie = new createjs.Bitmap(queenImg);
-    queenie.x = -50;
-    queenie.y = -100;
-    queenContainer.addChild(queenie);
-    queenContainer.on("pressmove",function(evt) {
-        // currentTarget will be the container that the event listener was added to:
+var cameronImg = new Image();
+cameronImg.src = 'images/cameron.png';
+
+function addDragImg(img, _x, _y, isFlipped) {
+    var imgContainer = new createjs.Container();
+    imgContainer.x = (_x === undefined) ? 100 : _x;
+    imgContainer.y = (_y === undefined) ? 100 : _y;
+    var imgObj = new createjs.Bitmap(img);
+    imgObj.x = -50;
+    imgObj.y = -100;
+    imgObj.scaleX = (isFlipped) ? -1 : 1;
+    img.regX = 100;
+    imgObj.name = 'image';
+    imgContainer.addChild(imgObj);
+    
+    imgContainer.on('pressmove', function(evt) {
         evt.currentTarget.x = evt.stageX;
         evt.currentTarget.y = evt.stageY;
-        // make sure to redraw the stage to show the change:
         stage.update();   
     });
-    stage.addChildAt(queenContainer, 1);
+
+    imgObj.on('dblclick', function(event) {
+        event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
+        event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
+    })
+
+    stage.addChildAt(imgContainer, 1);
     stage.update();
+}
+
+
+function addQueen() {
+    addDragImg(queenImg);
 }
 
 var queenBtn = document.querySelector('#addQueen');
@@ -71,9 +92,11 @@ function render() {
     bubbleText.textAlign = "left";
     bubbleText.lineWidth = 180;
     bubbleText.name = 'text';
-    bubbleText.x = -80;
-    bubbleText.y = -60;
+    bubbleText.x = -75;
+    bubbleText.y = -55;
 
+    var hitArea = new createjs.Shape(new createjs.Graphics().beginFill("#fff").drawRect(-80 , -50, 150,60));
+    bubbleText.hitArea = hitArea;
 
 
     var bubbleImg = new createjs.Bitmap("images/bubble1.png");
@@ -81,16 +104,23 @@ function render() {
     bubbleImg.y = -70;
 
     var bubbleDrag = new createjs.Container();
-    bubbleDrag.x  = 100;
-    bubbleDrag.y = 100;
-    bubbleDrag.addChild(bubbleImg, bubbleText);
+    bubbleDrag.x  = 150;
+    bubbleDrag.y = 70;
+    bubbleDrag.addChild(bubbleImg, hitArea, bubbleText);
 
     stage.addChild(background, bubbleDrag, frame);
 
 
-    bubbleDrag.on('dblclick', function(event) {
-        console.log(event, this);
-        event.currentTarget.getChildByName('text').text = prompt('Enter text');
+    hitArea.on('dblclick', function(event) {
+        var userText = prompt('Enter text');
+        if (userText)
+            bubbleText.text = userText;
+        stage.update();
+    });
+
+    bubbleImg.on('dblclick', function(event) {
+        event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
+        event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
         stage.update();
     })
 
@@ -103,7 +133,8 @@ function render() {
     });
 
 
-
+    addDragImg(cameronImg, 10, 200);
+    addDragImg(queenImg, 360, 220, true);
 
     stage.update();
     createjs.Ticker.on("tick", stage)
