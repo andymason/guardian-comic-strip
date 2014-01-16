@@ -1,22 +1,18 @@
 <html>
 <head>
   <style>
-    body {
-      background: #000;
-    }
-
-    .hidden {
-      display: none;
-    }
+  	#strip {
+  		
+  	}
   </style>
 </head>
 <body>
 
-    <canvas id="screen" width="640" height="480"></canvas>
-    <img src="img/test.jpg" id="source_image" width="640">
-    <img src="img/ghosting_ref.jpg">
+    <canvas id="strip" width="960" height="300"></canvas>
 
-    <script src="js/analogue.js"></script>
-    <script src="js/test.js"></script>
+    <button id="background">Red background</button>
+    
+    <script src="easeljs-0.7.1.min.js"></script>
+    <script src="comic.js"></script>
 </body>
 </html>
