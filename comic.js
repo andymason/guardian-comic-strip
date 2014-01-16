@@ -7,6 +7,31 @@ stage.snapToPixelEnabled = true;
 var bgRedClouds = new Image();
 bgRedClouds.src = 'images/bg_red_clouds.jpg';
 
+var queenImg = new Image();
+queenImg.src = 'images/queen.png';
+
+function addQueen() {
+    var queenContainer = new createjs.Container();
+    queenContainer.x = 100;
+    queenContainer.y = 100;
+    var queenie = new createjs.Bitmap(queenImg);
+    queenie.x = -50;
+    queenie.y = -100;
+    queenContainer.addChild(queenie);
+    queenContainer.on("pressmove",function(evt) {
+        // currentTarget will be the container that the event listener was added to:
+        evt.currentTarget.x = evt.stageX;
+        evt.currentTarget.y = evt.stageY;
+        // make sure to redraw the stage to show the change:
+        stage.update();   
+    });
+    stage.addChildAt(queenContainer, 1);
+    stage.update();
+}
+
+var queenBtn = document.querySelector('#addQueen');
+queenBtn.addEventListener('click', addQueen, false);
+
 
 var bgClouds = new Image();
 bgClouds.onload = render;
@@ -42,12 +67,12 @@ frame.addChild(border, col1, col2);
 
 function render() {
 
-    var bubbleText = new createjs.Text("This is some sample test that should spill over onto some new lines.", "bold 14px Arial", "#000");
+    var bubbleText = new createjs.Text("This is some sample test that should spill over onto some new lines.", "normal 16px 'Gloria Hallelujah', cursive", "#000");
     bubbleText.textAlign = "left";
     bubbleText.lineWidth = 180;
     bubbleText.name = 'text';
     bubbleText.x = -80;
-    bubbleText.y = -40;
+    bubbleText.y = -60;
 
 
 
