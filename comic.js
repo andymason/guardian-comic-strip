@@ -18,15 +18,21 @@ queenImg.src = 'images/queen.png';
 var cameronImg = new Image();
 cameronImg.src = 'images/cameron.png';
 
+var cloudsImg = new Image();
+cloudsImg.src = 'images/bubble1.png';
+
 function addDragImg(img, _x, _y, isFlipped) {
     var imgContainer = new createjs.Container();
     imgContainer.x = (_x === undefined) ? 100 : _x;
     imgContainer.y = (_y === undefined) ? 100 : _y;
     var imgObj = new createjs.Bitmap(img);
-    imgObj.x = -50;
-    imgObj.y = -100;
-    imgObj.scaleX = (isFlipped) ? -1 : 1;
-    img.regX = 100;
+    imgObj.x = -(imgObj.getBounds().width /2);
+    imgObj.y = -(imgObj.getBounds().height /2);
+    if (isFlipped) {
+        imgObj.scaleX = (isFlipped) ? -1 : 1;
+        imgObj.x *= -1;
+    }
+
     imgObj.name = 'image';
     imgContainer.addChild(imgObj);
     
@@ -39,6 +45,7 @@ function addDragImg(img, _x, _y, isFlipped) {
     imgObj.on('dblclick', function(event) {
         event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
         event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
+        stage.update();
     })
 
     stage.addChildAt(imgContainer, 1);
@@ -132,6 +139,15 @@ function addBubble(_text, _x, _y) {
         stage.update();
     });
 
+    bubbleDrag.on('click', function(event) {
+        stage.swapChildrenAt(
+            stage.children.length - 2,
+            stage.getChildIndex(event.currentTarget)
+        );
+        //stage.swapChildrenAt(stage.children.length - 1, stage.getChildIndex(frame));
+        stage.update();
+    })
+
     bubbleImg.on('dblclick', function(event) {
         event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
         event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
@@ -146,7 +162,8 @@ function addBubble(_text, _x, _y) {
         stage.update();   
     });
 
-    stage.addChild(bubbleDrag);
+    stage.addChildAt(bubbleDrag, stage.children.length - 1);
+    stage.update();
 }
 
 
@@ -155,9 +172,19 @@ function render() {
 
     stage.addChild(background, frame);
     addBubble('WHY ARE YOU STILL HERE DAVID? \n\nHAVEN\'T YOU GOT HOME TO GO TO?', 150, 70);
-    addDragImg(cameronImg, 10, 200);
-    addDragImg(queenImg, 360, 220, true);
+    addDragImg(cameronImg, 60, 200);
+    addDragImg(queenImg, 255, 220, true);
 
     stage.update();
-    createjs.Ticker.on("tick", stage)
+    // FIXME: 100% cpup
+    //createjs.Ticker.on("tick", stage)
 }
+
+WebFont.load({
+    google: {
+      families: ['Gloria Hallelujah']
+    },
+    active: function() {
+        stage.update();
+    }
+});
