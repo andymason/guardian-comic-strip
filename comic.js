@@ -48,7 +48,17 @@ function addDragImg(img, _x, _y, isFlipped) {
         stage.update();
     })
 
-    stage.addChildAt(imgContainer, 1);
+    imgContainer.on('click', function(event) {
+        stage.setChildIndex(
+            event.currentTarget,
+            stage.children.length - 2
+        );
+        //stage.swapChildrenAt(stage.children.length - 1, stage.getChildIndex(frame));
+        stage.update();
+    });
+
+    //stage.addChildAt(imgContainer, 1);
+    stage.addChildAt(imgContainer, stage.children.length - 1);
     stage.update();
 }
 
@@ -99,7 +109,11 @@ frame.addChild(border, col1, col2);
 
 
 
-function addBubble(_text, _x, _y) {
+function addBubble(_text, _x, _y, _img) {
+    var img = _img || "images/bubble1.png";
+    var bubbleImg = new createjs.Bitmap(img);
+    bubbleImg.x = -1 * bubbleImg.getBounds().width /2;
+    bubbleImg.y = -1 * bubbleImg.getBounds().height /2;
 
     var sampleText = [
         'Oh herro. Did you know I\'ve got over eleven goldfish in my bathtub?',
@@ -110,43 +124,49 @@ function addBubble(_text, _x, _y) {
         'I\'ve tasted human flesh.'
     ];
 
-
     var text = (_text === undefined) ? sampleText[Math.floor(sampleText.length * Math.random())] : _text;
     var bubbleText = new createjs.Text(text, "normal 16px 'Gloria Hallelujah', cursive", "#000");
     bubbleText.textAlign = "left";
     bubbleText.lineWidth = 180;
     bubbleText.name = 'text';
-    bubbleText.x =  -75;
-    bubbleText.y = -55;
+    bubbleText.x =  bubbleImg.x + 20;
+    bubbleText.y = bubbleImg.y + 20;
 
-    var hitArea = new createjs.Shape(new createjs.Graphics().beginFill("#fff").drawRect(-80 , -50, 150,60));
-    bubbleText.hitArea = hitArea;
+    
 
+    var hitArea = new createjs.Shape(
+        new createjs.Graphics().beginFill("#FFF").drawRect(
+            bubbleImg.x + 20,
+            bubbleImg.y + 20,
+            bubbleImg.getBounds().width -40,
+            bubbleImg.getBounds().height - 50
+        )
+    );
+    //bubbleText.hitArea = hitArea;
 
-    var bubbleImg = new createjs.Bitmap("images/bubble1.png");
-    bubbleImg.x = -100;
-    bubbleImg.y = -70;
 
     var bubbleDrag = new createjs.Container();
     bubbleDrag.x  = (_x === undefined) ? 100 : _x;
     bubbleDrag.y = (_y === undefined) ? 100 : _y;
     bubbleDrag.addChild(bubbleImg, hitArea, bubbleText);
 
-    hitArea.on('dblclick', function(event) {
+    hitArea.on('dblclick', updateText);
+    bubbleText.on('dblclick', updateText);
+
+    function updateText(event) {
         var userText = prompt('Enter text');
         if (userText)
             bubbleText.text = userText;
         stage.update();
-    });
+    }
 
     bubbleDrag.on('click', function(event) {
-        stage.swapChildrenAt(
-            stage.children.length - 2,
-            stage.getChildIndex(event.currentTarget)
+        stage.setChildIndex(
+            event.currentTarget,
+            stage.children.length - 2
         );
-        //stage.swapChildrenAt(stage.children.length - 1, stage.getChildIndex(frame));
         stage.update();
-    })
+    });
 
     bubbleImg.on('dblclick', function(event) {
         event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
@@ -179,6 +199,22 @@ function render() {
     // FIXME: 100% cpup
     //createjs.Ticker.on("tick", stage)
 }
+
+
+var faces = document.querySelectorAll('.face');
+for (var i=0; i  <  faces.length; i++){
+    faces[i].addEventListener('click', function() {
+        addDragImg(this.src);
+    }, false)
+}
+
+var bubbles = document.querySelectorAll('.bubble');
+for (var i=0; i  <  bubbles.length; i++){
+    bubbles[i].addEventListener('click', function() {
+        addBubble(undefined, undefined, undefined, this.src);
+    }, false)
+} 
+
 
 WebFont.load({
     google: {
