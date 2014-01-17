@@ -4,6 +4,13 @@ stage.canvas.onmousedown = function(event) {
     event.preventDefault();
 }
 
+stage.canvas.addEventListener('contextmenu', function(e) {
+      if (e.button === 2) {
+       e.preventDefault();
+        return false;
+      }
+  }, false);
+
 // this lets our drag continue to track the mouse even when it leaves the canvas:
 // play with commenting this out to see the difference.
 stage.mouseMoveOutside = true;
@@ -49,6 +56,13 @@ function addDragImg(img, _x, _y, isFlipped) {
     })
 
     imgContainer.on('click', function(event) {
+         if (event.nativeEvent.button == 2 ) { 
+            stage.removeChild(event.currentTarget);
+            stage.update();
+            return;
+        } 
+
+
         stage.setChildIndex(
             event.currentTarget,
             stage.children.length - 2
@@ -56,6 +70,7 @@ function addDragImg(img, _x, _y, isFlipped) {
         //stage.swapChildrenAt(stage.children.length - 1, stage.getChildIndex(frame));
         stage.update();
     });
+
 
     //stage.addChildAt(imgContainer, 1);
     stage.addChildAt(imgContainer, stage.children.length - 1);
@@ -149,6 +164,12 @@ function addBubble(_text, _x, _y, _img) {
     }
 
     bubbleDrag.on('click', function(event) {
+        if (event.nativeEvent.button == 2 ) { 
+            stage.removeChild(event.currentTarget);
+            stage.update();
+            return;
+        } 
+
         stage.setChildIndex(
             event.currentTarget,
             stage.children.length - 2
@@ -235,6 +256,7 @@ function imgurUpload() {
 
     exportBtn.innerHTML = 'Uploading...';
     exportBtn.setAttribute('disabled', 'disabled');
+    exportImgPath.value = '';
 
     $.ajax({
         url: 'https://api.imgur.com/3/image',
@@ -247,6 +269,7 @@ function imgurUpload() {
             name: 'guardian-hackday-comic',
             title: 'Guardian Hackday 2014 comic',
             description: 'Guardian Hackday 2014 comic',
+            //album: 'zDcHM',
             image: dataURL
           },
           dataType: 'json',
@@ -259,7 +282,7 @@ function imgurUpload() {
                 //window.open('http://imgur.com/gallery/' + response.data.id);
 
                 var tweetLink = 'https://twitter.com/intent/tweet?text=Check%20out%20my%20Guardian%20hack%20day%20comic.&url='
-                tweetLink += encodeURIComponent(path);
+                tweetLink += encodeURIComponent('http://imgur.com/' + response.data.id);
                 exportImgTweet.setAttribute('href', tweetLink);
               }
 
