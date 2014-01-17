@@ -118,7 +118,7 @@ function addBubble(_text, _x, _y, _img) {
     
 
     var hitArea = new createjs.Shape(
-        new createjs.Graphics().beginFill("#F0F").drawRect(
+        new createjs.Graphics().beginFill("#FFF").drawRect(
             bubbleImg.x + 20,
             bubbleImg.y + 20,
             bubbleImg.image.naturalWidth -40,
