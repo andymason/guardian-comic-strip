@@ -72,6 +72,11 @@ bgClouds.src = 'images/bg_clouds.jpg';
 
 var background = new createjs.Bitmap("images/bg_clouds.jpg");
 
+function updateBackground(_img) {
+    background.image = _img;
+    stage.update();
+}
+
 
 var frame = new createjs.Container();
 
@@ -192,7 +197,17 @@ for (var i=0; i  <  bubbles.length; i++){
     bubbles[i].addEventListener('click', function() {
         addBubble(undefined, undefined, undefined, this);
     }, false)
-} 
+}
+
+var backgrounds = document.querySelectorAll('.background');
+for (var i=0; i  <  backgrounds.length; i++){
+    backgrounds[i].addEventListener('click', function() {
+        updateBackground(this);
+    }, false)
+}
+
+
+
 
 
 WebFont.load({
