@@ -26,8 +26,8 @@ function addDragImg(img, _x, _y, isFlipped) {
     imgContainer.x = (_x === undefined) ? 100 : _x;
     imgContainer.y = (_y === undefined) ? 100 : _y;
     var imgObj = new createjs.Bitmap(img);
-    imgObj.x = -(imgObj.getBounds().width /2);
-    imgObj.y = -(imgObj.getBounds().height /2);
+    imgObj.x = -(imgObj.image.naturalWidth /2);
+    imgObj.y = -(imgObj.image.naturalHeight /2);
     if (isFlipped) {
         imgObj.scaleX = (isFlipped) ? -1 : 1;
         imgObj.x *= -1;
@@ -43,7 +43,7 @@ function addDragImg(img, _x, _y, isFlipped) {
     });
 
     imgObj.on('dblclick', function(event) {
-        event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
+        event.currentTarget.x += event.currentTarget.image.naturalWidth * event.currentTarget.scaleX;
         event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
         stage.update();
     })
@@ -95,8 +95,8 @@ frame.addChild(border, col1, col2);
 function addBubble(_text, _x, _y, _img) {
     var img = _img || "images/bubble1.png";
     var bubbleImg = new createjs.Bitmap(img);
-    bubbleImg.x = -1 * bubbleImg.getBounds().width /2;
-    bubbleImg.y = -1 * bubbleImg.getBounds().height /2;
+    bubbleImg.x = -1 * bubbleImg.image.naturalWidth /2;
+    bubbleImg.y = -1 * bubbleImg.image.naturalHeight /2;
 
     var sampleText = [
         'Oh herro. Did you know I\'ve got over eleven goldfish in my bathtub?',
@@ -118,11 +118,11 @@ function addBubble(_text, _x, _y, _img) {
     
 
     var hitArea = new createjs.Shape(
-        new createjs.Graphics().beginFill("#FFF").drawRect(
+        new createjs.Graphics().beginFill("#F0F").drawRect(
             bubbleImg.x + 20,
             bubbleImg.y + 20,
-            bubbleImg.getBounds().width -40,
-            bubbleImg.getBounds().height - 50
+            bubbleImg.image.naturalWidth -40,
+            bubbleImg.image.naturalHeight - 50
         )
     );
     //bubbleText.hitArea = hitArea;
@@ -152,7 +152,7 @@ function addBubble(_text, _x, _y, _img) {
     });
 
     bubbleImg.on('dblclick', function(event) {
-        event.currentTarget.x += event.currentTarget.image.width * event.currentTarget.scaleX;
+        event.currentTarget.x += event.currentTarget.image.naturalWidth * event.currentTarget.scaleX;
         event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
         stage.update();
     })
@@ -183,14 +183,14 @@ function render() {
 var faces = document.querySelectorAll('.face');
 for (var i=0; i  <  faces.length; i++){
     faces[i].addEventListener('click', function() {
-        addDragImg(this.src);
+        addDragImg(this);
     }, false)
 }
 
 var bubbles = document.querySelectorAll('.bubble');
 for (var i=0; i  <  bubbles.length; i++){
     bubbles[i].addEventListener('click', function() {
-        addBubble(undefined, undefined, undefined, this.src);
+        addBubble(undefined, undefined, undefined, this);
     }, false)
 } 
 

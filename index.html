@@ -22,6 +22,15 @@
       margin: 0;
       padding: 0;
       font-size: 12px;
+      clear: both;
+    }
+
+    #instructions {
+      font-family: monospace;
+      font-size: 11px;
+      background: #FFF;
+      color: #222;
+      float: right;
     }
 
   </style>
@@ -29,6 +38,12 @@
 <body>
 
     <canvas id="strip" width="960" height="300"></canvas>
+    <ul id="instructions">
+      <li>Click and image to add it to the comic</li>
+      <li>Double click text to edit</li>
+      <li>Double click face or bubble border to flip it</li>
+      <li>F5 to start again</li>
+    </ul>
 
     <div id="export_wrapper">
       <button id="export">Export</button>
@@ -37,8 +52,12 @@
       <a target="_blank" href="" id="export_tweet" href="">Tweet</a>
     </div>
 
+    
+
     <div id="faces" class="images">
       <h2>Faces</h2>
+      <img src="images/cameron.png" width="50" class="face" />
+      <img src="images/queen.png" width="50" class="face" />
       <img src="images/rage_01.png" width="50" class="face" />
       <img src="images/rage_02.png" width="50" class="face" />
       <img src="images/rage_03.png" width="50" class="face" />
@@ -53,8 +72,8 @@
 
     <div id="backgrounds" class="images">
       <h2>Backgrounds</h2>
-      <img src="images/bubble1.png" width="50" class="background" />
-      <img src="images/bubble2.png" width="50" class="background" />
+      <img src="images/bg_clouds.jpg" width="50" class="background" />
+      <img src="images/bg_red_clouds.jpg" width="50" class="background" />
     </div>
     
     <script src="webfont.js"></script>
