@@ -9,31 +9,57 @@
       width: 100%;
     }
 
+    #export_wrapper {
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    #export_url {
+      width: 400px
+    }
+
+    .images h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 12px;
+    }
+
   </style>
 </head>
 <body>
 
     <canvas id="strip" width="960" height="300"></canvas>
 
-    <button id="background">Red background</button>
+    <div id="export_wrapper">
+      <button id="export">Export</button>
+      <input type="text" value="" id="export_url">
+      <a target="_blank" href="" id="export_link" href="">Open</a>
+      <a target="_blank" href="" id="export_tweet" href="">Tweet</a>
+    </div>
 
-    <button id="addQueen">addQueen</button>
-    <button id="addSpeech">Add speech bubble</button>
-
-    <div id="faces">
+    <div id="faces" class="images">
+      <h2>Faces</h2>
       <img src="images/rage_01.png" width="50" class="face" />
       <img src="images/rage_02.png" width="50" class="face" />
       <img src="images/rage_03.png" width="50" class="face" />
       <img src="images/rage_04.png" width="50" class="face" />
     </div>
 
-    <div id="speech">
+    <div id="speech" class="images">
+      <h2>Bubbles</h2>
       <img src="images/bubble1.png" width="50" class="bubble" />
       <img src="images/bubble2.png" width="50" class="bubble" />
+    </div>
+
+    <div id="backgrounds" class="images">
+      <h2>Backgrounds</h2>
+      <img src="images/bubble1.png" width="50" class="background" />
+      <img src="images/bubble2.png" width="50" class="background" />
     </div>
     
     <script src="webfont.js"></script>
     <script src="easeljs-0.7.1.min.js"></script>
+    <script src="jquery-1.10.2.min.js"></script>
     <script src="comic.js"></script>
 </body>
 </html>

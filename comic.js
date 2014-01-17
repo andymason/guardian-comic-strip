@@ -63,18 +63,6 @@ function addDragImg(img, _x, _y, isFlipped) {
 }
 
 
-function addQueen() {
-    addDragImg(queenImg);
-}
-
-var queenBtn = document.querySelector('#addQueen');
-queenBtn.addEventListener('click', addQueen, false);
-
-var speechBtn = document.querySelector('#addSpeech');
-speechBtn.addEventListener('click', function() { addBubble(); }, false);
-
-
-
 
 var bgClouds = new Image();
 bgClouds.onload = render;
@@ -84,11 +72,6 @@ bgClouds.src = 'images/bg_clouds.jpg';
 
 var background = new createjs.Bitmap("images/bg_clouds.jpg");
 
-var bgBtn = document.querySelector('#background');
-bgBtn.addEventListener('click', function() {
-    background.image = bgRedClouds;
-    stage.update();
-});
 
 var frame = new createjs.Container();
 
@@ -188,16 +171,12 @@ function addBubble(_text, _x, _y, _img) {
 
 
 function render() {
-    
-
     stage.addChild(background, frame);
-    addBubble('WHY ARE YOU STILL HERE DAVID? \n\nHAVEN\'T YOU GOT HOME TO GO TO?', 150, 70);
     addDragImg(cameronImg, 60, 200);
     addDragImg(queenImg, 255, 220, true);
+    addBubble('WHY ARE YOU STILL HERE DAVID? \n\nHAVEN\'T YOU GOT HOME TO GO TO?', 150, 70);
 
     stage.update();
-    // FIXME: 100% cpup
-    //createjs.Ticker.on("tick", stage)
 }
 
 
@@ -224,3 +203,57 @@ WebFont.load({
         stage.update();
     }
 });
+
+
+var exportImgPath = document.querySelector('#export_url');
+var exportImgLink = document.querySelector('#export_link');
+var exportImgTweet = document.querySelector('#export_tweet');
+
+var exportBtn = document.querySelector('#export');
+exportBtn.addEventListener('click', imgurUpload, false)
+
+function imgurUpload() {
+    //var tmpImg = document.createElement('img');
+    var clientId = 'e48f68d422825de';
+    var dataURL = stage.canvas.toDataURL('image/png');;
+    dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+
+    exportBtn.innerHTML = 'Uploading...';
+    exportBtn.setAttribute('disabled', 'disabled');
+
+    $.ajax({
+        url: 'https://api.imgur.com/3/image',
+        type: 'post',
+        headers: {
+            'Authorization': 'Client-ID ' + clientId
+          },
+          data: {
+            type: 'base64',
+            name: 'guardian-hackday-comic',
+            title: 'Guardian Hackday 2014 comic',
+            description: 'Guardian Hackday 2014 comic',
+            image: dataURL
+          },
+          dataType: 'json',
+          success: function(response) {
+              if(response.success) {
+                console.log(response);
+                var path = 'http://imgur.com/gallery/' + response.data.id;
+                exportImgPath.value = path;
+                exportImgLink.setAttribute('href', path);
+                //window.open('http://imgur.com/gallery/' + response.data.id);
+
+                var tweetLink = 'https://twitter.com/intent/tweet?text=Check%20out%20my%20Guardian%20hack%20day%20comic.&url='
+                tweetLink += encodeURIComponent(path);
+                exportImgTweet.setAttribute('href', tweetLink);
+              }
+
+              exportBtn.innerHTML = 'Export';
+              exportBtn.removeAttribute('disabled');
+            },
+            error: function() {
+                exportBtn.innerHTML = 'Export';
+              exportBtn.removeAttribute('disabled');
+            }
+        });
+}
