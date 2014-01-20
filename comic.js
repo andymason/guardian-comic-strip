@@ -2,6 +2,31 @@ var stage = new createjs.Stage("strip");
 
 stage.canvas.onmousedown = function(event) {
     event.preventDefault();
+};
+
+stage.canvas.addEventListener('dragover', function(event) {
+    event.preventDefault();
+});
+
+stage.canvas.addEventListener('drop', function(event) {
+    event.preventDefault();
+    if (event.dataTransfer.getData('isBubble') === 'true') {
+        addBubble(undefined, event.pageX, event.pageY, event.dataTransfer.getData('imageSrc'));
+    } else {
+        addDragImg(event.dataTransfer.getData('imageSrc'), event.pageX, event.pageY);
+    }
+
+});
+
+var dragImage = null;
+
+// setup drags
+var drags = document.querySelectorAll('.drag');
+for (var i = 0; i < drags.length; i++) {
+    drags[i].addEventListener('dragstart', function(e) {
+       e.dataTransfer.setData('imageSrc', e.target.src);
+       e.dataTransfer.setData('isBubble', e.target.classList.contains('bubble'));
+    }, false);
 }
 
 stage.canvas.addEventListener('contextmenu', function(e) {
@@ -42,25 +67,25 @@ function addDragImg(img, _x, _y, isFlipped) {
 
     imgObj.name = 'image';
     imgContainer.addChild(imgObj);
-    
+
     imgContainer.on('pressmove', function(evt) {
         evt.currentTarget.x = evt.stageX;
         evt.currentTarget.y = evt.stageY;
-        stage.update();   
+        stage.update();
     });
 
     imgObj.on('dblclick', function(event) {
         event.currentTarget.x += event.currentTarget.image.naturalWidth * event.currentTarget.scaleX;
         event.currentTarget.scaleX = event.currentTarget.scaleX * -1;
         stage.update();
-    })
+    });
 
     imgContainer.on('click', function(event) {
-         if (event.nativeEvent.button == 2 ) { 
+         if (event.nativeEvent.button == 2 ) {
             stage.removeChild(event.currentTarget);
             stage.update();
             return;
-        } 
+        }
 
 
         stage.setChildIndex(
@@ -135,7 +160,7 @@ function addBubble(_text, _x, _y, _img) {
     bubbleText.x =  bubbleImg.x + 20;
     bubbleText.y = bubbleImg.y + 20;
 
-    
+
 
     var hitArea = new createjs.Shape(
         new createjs.Graphics().beginFill("#FFF").drawRect(
@@ -164,11 +189,11 @@ function addBubble(_text, _x, _y, _img) {
     }
 
     bubbleDrag.on('click', function(event) {
-        if (event.nativeEvent.button == 2 ) { 
+        if (event.nativeEvent.button == 2 ) {
             stage.removeChild(event.currentTarget);
             stage.update();
             return;
-        } 
+        }
 
         stage.setChildIndex(
             event.currentTarget,
@@ -188,7 +213,7 @@ function addBubble(_text, _x, _y, _img) {
         evt.currentTarget.x = evt.stageX;
         evt.currentTarget.y = evt.stageY;
         // make sure to redraw the stage to show the change:
-        stage.update();   
+        stage.update();
     });
 
     stage.addChildAt(bubbleDrag, stage.children.length - 1);
