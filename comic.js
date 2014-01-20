@@ -10,10 +10,19 @@ stage.canvas.addEventListener('dragover', function(event) {
 
 stage.canvas.addEventListener('drop', function(event) {
     event.preventDefault();
+
+    var id = event.dataTransfer.getData('imageID');
+
+    if (!id)
+        return;
+
+
+    var img = document.getElementById(id);
+    console.log(img);
     if (event.dataTransfer.getData('isBubble') === 'true') {
-        addBubble(undefined, event.pageX, event.pageY, event.dataTransfer.getData('imageSrc'));
+        addBubble(undefined, event.pageX, event.pageY, img);
     } else {
-        addDragImg(event.dataTransfer.getData('imageSrc'), event.pageX, event.pageY);
+        addDragImg(img, event.pageX, event.pageY);
     }
 
 });
@@ -24,7 +33,7 @@ var dragImage = null;
 var drags = document.querySelectorAll('.drag');
 for (var i = 0; i < drags.length; i++) {
     drags[i].addEventListener('dragstart', function(e) {
-       e.dataTransfer.setData('imageSrc', e.target.src);
+       e.dataTransfer.setData('imageID', e.target.id);
        e.dataTransfer.setData('isBubble', e.target.classList.contains('bubble'));
     }, false);
 }
@@ -45,10 +54,10 @@ var bgRedClouds = new Image();
 bgRedClouds.src = 'images/bg_red_clouds.jpg';
 
 var queenImg = new Image();
-queenImg.src = 'images/queen.png';
+queenImg.src = 'images/06_face.png';
 
 var cameronImg = new Image();
-cameronImg.src = 'images/cameron.png';
+cameronImg.src = 'images/11_face.png';
 
 var cloudsImg = new Image();
 cloudsImg.src = 'images/bubble1.png';
@@ -103,10 +112,12 @@ function addDragImg(img, _x, _y, isFlipped) {
 }
 
 
-
+/*
 var bgClouds = new Image();
 bgClouds.onload = render;
 bgClouds.src = 'images/bg_clouds.jpg';
+*/
+
 
 
 
@@ -225,10 +236,16 @@ function render() {
     stage.addChild(background, frame);
     addDragImg(cameronImg, 60, 200);
     addDragImg(queenImg, 255, 220, true);
-    addBubble('WHY ARE YOU STILL HERE DAVID? \n\nHAVEN\'T YOU GOT HOME TO GO TO?', 150, 70);
+    addBubble('HEY KERBY.\nWHY ARE YOU ALWAYS SUCKING THINGS UP INTO YOUR MOUTH?', 150, 70);
 
     stage.update();
 }
+
+
+// Replace with better loading logic
+setTimeout(function() {
+    render();
+}, 700);
 
 
 var faces = document.querySelectorAll('.face');
@@ -311,11 +328,11 @@ function imgurUpload() {
                 exportImgTweet.setAttribute('href', tweetLink);
               }
 
-              exportBtn.innerHTML = 'Export';
+              exportBtn.innerHTML = 'Export to imgur';
               exportBtn.removeAttribute('disabled');
             },
             error: function() {
-                exportBtn.innerHTML = 'Export';
+                exportBtn.innerHTML = 'Export to imgur';
               exportBtn.removeAttribute('disabled');
             }
         });

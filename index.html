@@ -1,5 +1,6 @@
 <html>
 <head>
+  <title>Guardian comic creator - Guardian hack day 2014</title>
 
   <style>
   	#strip {
@@ -22,15 +23,21 @@
       margin: 0;
       padding: 0;
       font-size: 12px;
+      font-family: monospace;
       clear: both;
     }
 
-    #instructions {
+    #instructions, footer {
       font-family: monospace;
       font-size: 11px;
       background: #FFF;
       color: #222;
       float: right;
+    }
+
+    footer {
+      float: none;
+      margin: 20px 0;
     }
 
     #examples_container {
@@ -43,7 +50,7 @@
 
     <canvas id="strip" width="960" height="300"></canvas>
     <ul id="instructions">
-      <li>Click and image to add it to the comic</li>
+      <li>Click or drag an image to add it to the comic</li>
       <li>Double click text to edit</li>
       <li>Double click face or bubble border to flip it</li>
       <li>Right click to delete an item</li>
@@ -51,7 +58,7 @@
     </ul>
 
     <div id="export_wrapper">
-      <button id="export">Export</button>
+      <button id="export">Export to imgur</button>
       <input type="text" value="" id="export_url">
       <a target="_blank" href="" id="export_link" href="">Open</a>
       <a target="_blank" href="" id="export_tweet" href="">Tweet</a>
@@ -61,26 +68,44 @@
 
     <div id="faces" class="images">
       <h2>Faces</h2>
-      <img src="images/cameron.png" width="50" class="face drag" />
-      <img src="images/queen.png" width="50" class="face drag" />
-      <img src="images/bush_01.png" width="50" class="face drag" />
-      <img src="images/face_01.png" width="50" class="face drag" />
-      <img src="images/face_02.png" width="50" class="face drag" />
-      <img src="images/face_03.png" width="50" class="face drag" />
-      <img src="images/face_04.png" width="50" class="face drag" />
-      <img src="images/face_05.png" width="50" class="face drag" />
-      <img src="images/face_06.png" width="50" class="face drag" />
-      <img src="images/face_07.png" width="50" class="face drag" />
-      <img src="images/rage_01.png" width="50" class="face drag" />
-      <img src="images/rage_02.png" width="50" class="face drag" />
-      <img src="images/rage_03.png" width="50" class="face drag" />
-      <img src="images/rage_04.png" width="50" class="face drag" />
+
+      <!--
+      <img src="images/cameron.png" width="50" id="face20" class="face drag" />
+      <img src="images/queen.png" width="50" id="face21" class="face drag" />
+      <img src="images/bush_01.png" width="50" id="face22" class="face drag" />
+      <img src="images/face_01.png" width="50" id="face23" class="face drag" />
+      <img src="images/face_02.png" width="50" id="face24" class="face drag" />
+      <img src="images/face_03.png" width="50" id="face25" class="face drag" />
+      <img src="images/face_04.png" width="50" id="face26" class="face drag" />
+      <img src="images/face_05.png" width="50"  id="face27" class="face drag" />
+    -->
+
+      <img src="images/01_face.png" width="50"  id="face01" class="face drag" />
+      <img src="images/02_face.png" width="50"  id="face02" class="face drag" />
+      <img src="images/03_face.png" width="50"  id="face03" class="face drag" />
+      <img src="images/04_face.png" width="50"  id="face04" class="face drag" />
+      <img src="images/05_face.png" width="50"  id="face05" class="face drag" />
+      <img src="images/06_face.png" width="50"  id="face06" class="face drag" />
+      <img src="images/07_face.png" width="50"  id="face07" class="face drag" />
+      <img src="images/08_face.png" width="50"  id="face08" class="face drag" />
+      <img src="images/09_face.png" width="50"  id="face09" class="face drag" />
+      <img src="images/10_face.png" width="50"  id="face10" class="face drag" />
+      <img src="images/11_face.png" width="50"  id="face11" class="face drag" />
+      <img src="images/12_face.png" width="50"  id="face12" class="face drag" />
+      <img src="images/13_face.png" width="50"  id="face13" class="face drag" />
+
+      <img src="images/face_06.png" width="50"  id="face14" class="face drag" />
+      <img src="images/face_07.png" width="50"  id="face15" class="face drag" />
+      <img src="images/rage_01.png" width="50"  id="face16" class="face drag" />
+      <img src="images/rage_02.png" width="50"  id="face17" class="face drag" />
+      <img src="images/rage_03.png" width="50"  id="face18" class="face drag" />
+      <img src="images/rage_04.png" width="50"  id="face19" class="face drag" />
     </div>
 
     <div id="speech" class="images">
       <h2>Bubbles</h2>
-      <img src="images/bubble1.png" width="50" class="bubble drag" />
-      <img src="images/bubble2.png" width="50" class="bubble drag" />
+      <img src="images/bubble1.png" width="50" id="bubble01" class="bubble drag" />
+      <img src="images/bubble2.png" width="50" id="bubble02" class="bubble drag" />
     </div>
 
     <div id="backgrounds" class="images">
@@ -90,6 +115,8 @@
       <img src="images/bg_yellow.jpg" width="50" class="background" />
       <img src="images/bg_gu.jpg" width="50" class="background" />
     </div>
+
+    <footer>Created for Guardian hack day 2014</footer>
 
 
     <script src="webfont.js"></script>
